@@ -1,7 +1,7 @@
 # Doodle-AI
 
 
-![Screenshot 2024-10-27 133657](https://github.com/user-attachments/assets/5863c423-a057-4f39-a5f8-d599960b8ce5)
+<img width="959" alt="image" src="https://github.com/user-attachments/assets/e4aca9ed-4855-4ad7-a02a-efb87a4389b6" />
 
 A web application that allows users to draw on a canvas and generates an AI-powered description of the drawing. Using Flask as the backend, JavaScript for the canvas, and Meta's Vision model, this project turns sketches and doodles into meaningful descriptions. 
 
