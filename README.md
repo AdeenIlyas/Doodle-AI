@@ -7,19 +7,19 @@ A web application that allows users to draw on a canvas and generates an AI-powe
 
 # Setup 
 
-git clone https://github.com/AdeenIlyas/Doodle-AI.git
+- git clone https://github.com/AdeenIlyas/Doodle-AI.git
 
-cd Doodle-AI
+- cd Doodle-AI
 
-pip install -r requirements.txt
+- pip install -r requirements.txt
 
 # How to run the application
 
-Register for an api key through this link: https://docs.together.ai/docs/getting-started-with-llama-32-vision-models
+- Register for an api key through this link: https://docs.together.ai/docs/getting-started-with-llama-32-vision-models
 
-Open the html file in live server.
+- Open the html file in live server.
 
-Run the flask app using "python app.py".
+- Run the flask app using "python app.py".
 
 Now you can start drawing inside the canvas. Once done, click on predict drawing to get the description of the image.
 
