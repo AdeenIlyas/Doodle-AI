@@ -14,6 +14,14 @@
             align-items: center;
             text-align: center;
         }
+
+        .controls {
+            margin-top: 10px;
+        }
+
+        .color-picker {
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -23,17 +31,33 @@
     <canvas id="canvas" width="400" height="400"></canvas>
     <br>
 
-    <!-- Buttons -->
-    <button id="clearButton">Clear Canvas</button>
-    <button id="predictButton">Predict Drawing</button>
-    <div id="result"></div>
+    <!-- Controls -->
+    <div class="controls">
+        <button id="clearButton">Clear Canvas</button>
+        <button id="eraserButton">Eraser</button>
+        <button id="drawButton">Draw</button>
+        <button id="predictButton">Predict Drawing</button>
+        <label for="colorPicker">Choose Color:</label>
+        <input type="color" id="colorPicker" class="color-picker" value="#000000">
+    </div>
+
+    <div id="result" style="margin-top: 15px;"></div>
 
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
+        const clearButton = document.getElementById('clearButton');
+        const eraserButton = document.getElementById('eraserButton');
+        const drawButton = document.getElementById('drawButton');
+        const predictButton = document.getElementById('predictButton');
+        const colorPicker = document.getElementById('colorPicker');
+        const resultDiv = document.getElementById('result');
 
         let drawing = false;
+        let isEraser = false;
+        let currentColor = colorPicker.value;
 
+        // Set canvas background to white
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -44,9 +68,16 @@
             ctx.moveTo(e.offsetX, e.offsetY);
         });
 
-        // Draw while mouse is moving
+        // Draw or erase while mouse is moving
         canvas.addEventListener('mousemove', (e) => {
             if (drawing) {
+                if (isEraser) {
+                    ctx.strokeStyle = 'white';
+                    ctx.lineWidth = 10; // Eraser thickness
+                } else {
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineWidth = 2; // Drawing thickness
+                }
                 ctx.lineTo(e.offsetX, e.offsetY);
                 ctx.stroke();
             }
@@ -58,23 +89,33 @@
         });
 
         // Clear the canvas
-        document.getElementById('clearButton').addEventListener('click', () => {
+        clearButton.addEventListener('click', () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Refill background after clearing
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         });
 
+        // Activate eraser mode
+        eraserButton.addEventListener('click', () => {
+            isEraser = true;
+        });
+
+        // Activate drawing mode
+        drawButton.addEventListener('click', () => {
+            isEraser = false;
+        });
+
+        // Change drawing color
+        colorPicker.addEventListener('input', (e) => {
+            currentColor = e.target.value;
+        });
+
         // Predict drawing
-        document.getElementById('predictButton').addEventListener('click', async () => {
-            const resultDiv = document.getElementById('result');
+        predictButton.addEventListener('click', async () => {
             resultDiv.textContent = 'Predicting...';
 
             try {
-                // Convert canvas to image data without clearing or affecting the canvas
                 const imageData = canvas.toDataURL('image/png');
-
-                // Send image data to the Flask backend for prediction
                 const response = await fetch('http://127.0.0.1:5000/describe_image', {
                     method: 'POST',
                     headers: {
